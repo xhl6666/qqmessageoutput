@@ -43,6 +43,15 @@ class QQoutput():
             except:
                 str = NULL
             return str
+        
+    def get_group_member(self, group_id):
+        group_members = []
+        execute = "select memberuin,troopuin from TroopMemberInfo"
+        cursor = self.c.execute(execute)
+        for row in cursor:
+            uid, gid = self.fix(row[0], 1), self.fix(row[1], 1)
+            if gid == str(group_id): group_members.append(uid)
+        return group_members
 
     # 获得聊天记录
     def message(self, num, mode):
@@ -118,6 +127,8 @@ key = ''
 mode = 1
 # 导出的聊天对象
 yourfriendqq = 123456
+# 待导出群成员的群号
+group_id = 114514
 
 # 初始化
 q = QQoutput(dbfile, key)
@@ -125,3 +136,5 @@ q = QQoutput(dbfile, key)
 q.getAllMyFriends()
 # 导出聊天记录
 q.output(yourfriendqq, mode)
+# 导出指定群群成员列表
+_lst = q.get_group_member(group_id)
